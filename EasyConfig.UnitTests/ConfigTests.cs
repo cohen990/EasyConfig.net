@@ -9,6 +9,20 @@ namespace EasyConfig.UnitTests
     [TestFixture]
     public class ConfigTests
     {
+        private const string EnvironmentVariableTestKey = "EasyConfig_this_environment_variable_should_only_exist_during_these_tests";
+
+        [SetUp]
+        public void SetUp()
+        {
+            Environment.SetEnvironmentVariable(EnvironmentVariableTestKey, Guid.NewGuid().ToString(), EnvironmentVariableTarget.Process);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Environment.SetEnvironmentVariable(EnvironmentVariableTestKey, null, EnvironmentVariableTarget.Process);
+        }
+
         [Test]
         public void Populate_Object_GivenValidArgs_DoesntThrow()
         {
@@ -117,25 +131,25 @@ namespace EasyConfig.UnitTests
 
         private class InEnvironmentVariables
         {
-            [Environment("path"), Required]
+            [Environment(EnvironmentVariableTestKey), Required]
             public string Test;
         }
 
         private class NotInEnvironmentVariables
         {
-            [Environment("defninitely_not_in_environment_variables"), Required]
+            [Environment("shouldnt_be_in_environment_variables"), Required]
             public string Test;
         }
 
         private class NotRequired
         {
-            [Environment("defninitely_not_in_environment_variables")]
+            [Environment("shouldnt_be_in_environment_variables")]
             public string Test;
         }
 
         private class HasDefault
         {
-            [Environment("defninitely_not_in_environment_variables"), Default("defaulttest")]
+            [Environment("shouldnt_be_in_environment_variables"), Default("defaulttest")]
             public string Test;
         }
     }

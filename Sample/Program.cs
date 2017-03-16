@@ -1,8 +1,9 @@
 ﻿using System;
-using EasyConfig;
 using EasyConfig.Attributes;
 
-namespace Sample
+#pragma warning disable 649
+
+namespace EasyConfig.Sample
 {
     class Program
     {
