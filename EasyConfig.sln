@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig", "EasyConfig.csproj", "{73073CC7-83A4-4E86-93E9-40ACB485D53D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig", "EasyConfig/EasyConfig.csproj", "{73073CC7-83A4-4E86-93E9-40ACB485D53D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig.UnitTests", "..\EasyConfig.UnitTests\EasyConfig.UnitTests.csproj", "{DDAB69D3-C31F-41F5-B9F5-12C5D89CF419}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig.UnitTests", "EasyConfig.UnitTests\EasyConfig.UnitTests.csproj", "{DDAB69D3-C31F-41F5-B9F5-12C5D89CF419}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig.Sample", "Sample\EasyConfig.Sample.csproj", "{18F80661-723E-4FA3-88B2-123DCDB7F70B}"
 EndProject

@@ -50,7 +50,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EasyConfig.csproj">
+    <ProjectReference Include="..\EasyConfig\EasyConfig.csproj">
       <Project>{73073CC7-83A4-4E86-93E9-40ACB485D53D}</Project>
       <Name>EasyConfig</Name>
     </ProjectReference>
