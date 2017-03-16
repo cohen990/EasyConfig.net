@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EasyConfig</RootNamespace>
-    <AssemblyName>EasyConfig</AssemblyName>
+    <AssemblyName>EasyConfigDotNet</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,7 +43,7 @@
     <Compile Include="Attributes\CommandLineAttribute.cs" />
     <Compile Include="Attributes\ConfigurationAttribute.cs" />
     <Compile Include="ConfigurationSources.cs" />
-    <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Exceptions\ConfigurationMissingException.cs" />
     <Compile Include="Exceptions\ConfigurationTypeException.cs" />
     <Compile Include="Attributes\DefaultAttribute.cs" />

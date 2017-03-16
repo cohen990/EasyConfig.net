@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig", "EasyConfig.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig.UnitTests", "..\EasyConfig.UnitTests\EasyConfig.UnitTests.csproj", "{DDAB69D3-C31F-41F5-B9F5-12C5D89CF419}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConfig.Sample", "Sample\EasyConfig.Sample.csproj", "{18F80661-723E-4FA3-88B2-123DCDB7F70B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DDAB69D3-C31F-41F5-B9F5-12C5D89CF419}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDAB69D3-C31F-41F5-B9F5-12C5D89CF419}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDAB69D3-C31F-41F5-B9F5-12C5D89CF419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F80661-723E-4FA3-88B2-123DCDB7F70B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F80661-723E-4FA3-88B2-123DCDB7F70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F80661-723E-4FA3-88B2-123DCDB7F70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F80661-723E-4FA3-88B2-123DCDB7F70B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
