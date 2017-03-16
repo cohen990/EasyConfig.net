@@ -2,25 +2,29 @@
 
 Easily manage configuration within your .net application
 
+![Build Status](https://travis-ci.org/cohen990/EasyConfig.net.svg?branch=master)
+
+[nuget](https://www.nuget.org/packages/EasyConfig.net/)
+
 ## Features
 
-1. Strongly typed parameters
-	a. Uri
-	b. String
-	c. Int
-2. Configuration Sources
-	a. Environment Variables
-	b. Command Line Arguments
+* Strongly typed parameters
+	* Uri
+	* String
+	* Int
+* Configuration Sources
+	* Environment Variables
+	* Command Line Arguments
 
 ### Limitations
 
-1. The parameters object you create must use fields, not properties
+* The parameters object you create must use fields, not properties
 
 ### Coming Soon
 
-1. Other missing parameter types
-2. App.config as a configuration source
-3. Support for properties
+* Other missing parameter types
+* App.config as a configuration source
+* Support for properties
 
 ## Example
 
