@@ -7,9 +7,9 @@ using EasyConfig.Exceptions;
 
 namespace EasyConfig
 {
-    public class ConfigurationManager<T> where T : new()
+    public class Config
     {
-        public static T Initialize(params string[] args)
+        public static T Populate<T>(params string[] args) where T : new()
         {
             var parameters = new T();
 
@@ -81,7 +81,7 @@ namespace EasyConfig
             return argsDict;
         }
 
-        private static void SetValue(FieldInfo field, string value, string key, bool shouldHideInLog, ref T result)
+        private static void SetValue<T>(FieldInfo field, string value, string key, bool shouldHideInLog, ref T result) where T : new()
         {
             if (field.FieldType == typeof(Uri))
             {
