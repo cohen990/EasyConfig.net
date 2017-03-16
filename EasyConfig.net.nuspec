@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EasyConfig.net</id>
+    <version>1.0.0</version>
+    <authors>cohen990</authors>
+    <owners>cohen990</owners>
+    <licenseUrl>https://github.com/cohen990/EasyConfig.net/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cohen990/EasyConfig.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Easily manage configuration within your .net application</description>
+    <releaseNotes>Initial release of the package</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>configuration easy simple config environment commandline command line app appconfig</tags>
+  </metadata>
+  <files>
+    <file src="EasyConfig\bin\Release\**" target="build" />
+  </files>
+</package>
