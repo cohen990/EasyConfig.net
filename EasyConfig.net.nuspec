@@ -14,6 +14,6 @@
     <tags>configuration easy simple config environment commandline command line app appconfig</tags>
   </metadata>
   <files>
-    <file src="./EasyConfig/bin/Release/**" target="lib/" />
+    <file src="$TRAVIS_BUILD_DIR/EasyConfig/bin/Release/**" target="lib/" />
   </files>
 </package>
