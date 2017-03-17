@@ -31,6 +31,9 @@ namespace EasyConfig.Sample
 
             [CommandLine("int_default"), Default(1000)]
             public int Defaultable;
+
+            [AppConfig("AppConfigSetting")]
+            public string InAppConfig;
         }
     }
 }

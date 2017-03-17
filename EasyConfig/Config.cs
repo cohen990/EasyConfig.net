@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using EasyConfig.Attributes;
@@ -56,6 +57,15 @@ namespace EasyConfig
             if (sources.HasFlag(ConfigurationSources.CommandLine))
             {
                 got = argsDict.TryGetValue(key, out val);
+            }
+
+            if (!got && sources.HasFlag(ConfigurationSources.AppConfig))
+            {
+                val = ConfigurationManager.AppSettings[key];
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    got = true;
+                }
             }
 
             if (!got && sources.HasFlag(ConfigurationSources.Environment))

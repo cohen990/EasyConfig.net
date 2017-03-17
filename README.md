@@ -15,6 +15,7 @@ Easily manage configuration within your .net application
 * Configuration Sources
 	* Environment Variables
 	* Command Line Arguments
+	* App.config/Web.config/Machine.config
 
 ### Limitations
 
@@ -23,7 +24,6 @@ Easily manage configuration within your .net application
 ### Coming Soon
 
 * Other missing parameter types
-* App.config as a configuration source
 * Support for properties
 
 ## Example

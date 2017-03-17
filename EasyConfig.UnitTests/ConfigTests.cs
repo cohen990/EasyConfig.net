@@ -117,6 +117,27 @@ namespace EasyConfig.UnitTests
             Assert.Throws<ConfigurationTypeException>(() => Config.Populate<IntRequired>("number=notaninteger"));
         }
 
+        [Test]
+        public void Populate_InAppConfig_SetsValue()
+        {
+            var result = Config.Populate<InAppConfig>().Test;
+
+            Assert.That(result, Is.EqualTo("testvalue"));
+        }
+
+        [Test]
+        public void Populate_NotInAppConfig_Required_Throws()
+        {
+            Assert.Throws<ConfigurationMissingException>(() => Config.Populate<NotInAppConfig>());
+        }
+
+        [Test]
+        public void Populate_DefaultingAppConfig_SetsAsDefault()
+        {
+            var result = Config.Populate<DefaultingAppConfig>().Test;
+            Assert.That(result, Is.EqualTo("sample"));
+        }
+
         private class UriRequired
         {
             [EnvironmentOrCommandLine("endpoint"), Required]
@@ -150,6 +171,24 @@ namespace EasyConfig.UnitTests
         private class HasDefault
         {
             [Environment("shouldnt_be_in_environment_variables"), Default("defaulttest")]
+            public string Test;
+        }
+
+        private class InAppConfig
+        {
+            [AppConfig("InAppConfig")]
+            public string Test;
+        }
+
+        private class NotInAppConfig
+        {
+            [AppConfig("ShouldNeverBeInAppConfig"), Required]
+            public string Test;
+        }
+
+        private class DefaultingAppConfig
+        {
+            [AppConfig("ShouldNeverBeInAppConfig"), Default("sample")]
             public string Test;
         }
     }
