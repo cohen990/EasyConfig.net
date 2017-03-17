@@ -7,5 +7,5 @@ install:
 script:
   - xbuild ./EasyConfig.sln /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /toolsversion:12.0
   - nunit-console ./EasyConfig.UnitTests/bin/Release/EasyConfig.UnitTests.dll
-  - nuget pack EasyConfig.net.nuspec -version 1.0.TRAVIS_BUILD_NUMBER
-  - nuget push *.nupkg -apikey NugetApiKey
+  - nuget pack EasyConfig.net.nuspec -version 1.0.${TRAVIS_BUILD_NUMBER}
+  - nuget push *.nupkg -apikey ${NugetApiKey}
