@@ -9,10 +9,13 @@ using static EasyConfig.Reflection.MemberInfoReflector;
 
 namespace EasyConfig
 {
-    public class Config
+    public static class Config
     {
+        private static Dictionary<Type, Func<string, object>> SupportedTypes = new Dictionary<Type, Func<string, object>>();
+
         public static T Populate<T>(params string[] args) where T : new()
         {
+            InitializeTypeSupport();
             var parameters = new T();
 
             if (args == null) throw new ArgumentNullException(nameof(args));
@@ -59,6 +62,15 @@ namespace EasyConfig
             }
 
             return parameters;
+        }
+
+        private static void InitializeTypeSupport()
+        {
+            RegisterTypeSupport(typeof(Uri), (input) => new Uri(input, UriKind.Absolute));
+            RegisterTypeSupport(typeof(int), (input) => int.Parse(input));
+            RegisterTypeSupport(typeof(bool), (input) => bool.Parse(input));
+            RegisterTypeSupport(typeof(double), (input) => double.Parse(input));
+            RegisterTypeSupport(typeof(string), (input) => input);
         }
 
         private static Action<MemberInfo, T, object> GetSetterAction<T>(MemberInfo member)
@@ -126,37 +138,27 @@ namespace EasyConfig
 
         private static void SetValue<T>(MemberInfo member, Type memberType, Action<MemberInfo, T, object> SetValue, string value, string key, bool shouldHideInLog, ref T result) where T : new()
         {
-            if (memberType == typeof(Uri))
+            foreach (var type in SupportedTypes.Keys)
             {
-                Uri uri;
-
-                if (!Uri.TryCreate(value, UriKind.Absolute, out uri))
+                if(memberType == type)
                 {
-                    throw new ConfigurationTypeException(key, typeof(Uri));
+                    var func = SupportedTypes[type];
+                    try {
+                        var toSet = func(value);
+
+                        LogConfigurationValue(key, value, shouldHideInLog);
+
+                        SetValue(member, result, toSet);
+                        return;
+                    }
+                    catch(Exception e)
+                    {
+                        throw new ConfigurationTypeException(key, type, e);
+                    }
                 }
-
-                LogConfigurationValue(key, value, shouldHideInLog);
-
-                SetValue(member, result, uri);
             }
-            else if (memberType == typeof(int))
-            {
-                int i;
-                if (!int.TryParse(value, out i))
-                {
-                    throw new ConfigurationTypeException(key, typeof(int));
-                }
 
-                LogConfigurationValue(key, value, shouldHideInLog);
-
-                SetValue(member, result, i);
-            }
-            else
-            {
-                LogConfigurationValue(key, value, shouldHideInLog);
-
-                SetValue(member, result, value);
-            }
+            throw new TypeNotSupportedException(memberType);
         }
         
         private static void LogConfigurationValue(string key, string value, bool shouldHideInLog)
@@ -167,6 +169,16 @@ namespace EasyConfig
             }
 
             Console.WriteLine($"Using '{value}' for '{key}'");
+        }
+
+        public static void RegisterTypeSupport(Type type, Func<string, object> ConvertFromStringToType, bool replaceOldConversion = false)
+        {
+            if (!replaceOldConversion && SupportedTypes.ContainsKey(type))
+            {
+                return;
+            }
+
+            SupportedTypes[type] = ConvertFromStringToType;
         }
     }
 }
