@@ -2,7 +2,7 @@
 
 Easily manage configuration within your .net application
 
-![Build Status](https://travis-ci.org/cohen990/EasyConfig.net.svg?branch=master)
+[![Build Status](https://travis-ci.org/cohen990/EasyConfig.net.svg?branch=master)](https://travis-ci.org/cohen990/EasyConfig.net)
 
 [nuget](https://www.nuget.org/packages/EasyConfig.net/)
 
@@ -12,19 +12,13 @@ Easily manage configuration within your .net application
 	* Uri
 	* String
 	* Int
+	* Bool
+	* Double
+	* Infrastructure for adding support for any other types
 * Configuration Sources
 	* Environment Variables
 	* Command Line Arguments
 	* App.config/Web.config/Machine.config
-
-### Limitations
-
-* The parameters object you create must use fields, not properties
-
-### Coming Soon
-
-* Other missing parameter types
-* Support for properties
 
 ## Example
 
