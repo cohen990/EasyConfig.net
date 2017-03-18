@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using EasyConfig.Attributes;
 using EasyConfig.Exceptions;
+using static EasyConfig.Reflection.MemberInfoReflector;
 
 namespace EasyConfig
 {
@@ -18,12 +19,14 @@ namespace EasyConfig
 
             var argsDict = GetArgsDict(args);
 
-            foreach (var fieldInfo in typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance))
+            var members = GetFieldsAndProperties(typeof(T).GetMembers(BindingFlags.Public | BindingFlags.Instance));
+
+            foreach (var member in members)
             {
-                var defaultAttribute = fieldInfo.GetCustomAttribute<DefaultAttribute>();
-                var required = fieldInfo.GetCustomAttribute<RequiredAttribute>() != null;
-                var configurationAttribute = fieldInfo.GetCustomAttribute<ConfigurationAttribute>();
-                var shouldHideInLog = fieldInfo.GetCustomAttribute<SensitiveInformationAttribute>() != null;
+                var defaultAttribute = member.GetCustomAttribute<DefaultAttribute>();
+                var required = member.GetCustomAttribute<RequiredAttribute>() != null;
+                var configurationAttribute = member.GetCustomAttribute<ConfigurationAttribute>();
+                var shouldHideInLog = member.GetCustomAttribute<SensitiveInformationAttribute>() != null;
 
                 string value;
 
@@ -35,7 +38,7 @@ namespace EasyConfig
                     {
                         if (required)
                         {
-                            throw new ConfigurationMissingException(configurationAttribute.Key, fieldInfo.FieldType, configurationAttribute.ConfigurationSources);
+                            throw new ConfigurationMissingException(configurationAttribute.Key, member.GetUnderlyingType(), configurationAttribute.ConfigurationSources);
                         }
                         continue;
                     }
@@ -43,45 +46,12 @@ namespace EasyConfig
                     value = defaultAttribute.Default.ToString();
                 }
 
-                SetValue(
-                    fieldInfo,
-                    fieldInfo.FieldType,
-                    (member, result, toSet) => { (member as FieldInfo).SetValue(result, toSet); },
-                    value,
-                    configurationAttribute.Key,
-                    shouldHideInLog,
-                    ref parameters);
-            }
-
-            foreach(var propertyInfo in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                var defaultAttribute = propertyInfo.GetCustomAttribute<DefaultAttribute>();
-                var required = propertyInfo.GetCustomAttribute<RequiredAttribute>() != null;
-                var configurationAttribute = propertyInfo.GetCustomAttribute<ConfigurationAttribute>();
-                var shouldHideInLog = propertyInfo.GetCustomAttribute<SensitiveInformationAttribute>() != null;
-
-                string value;
-
-                var got = TryGet(argsDict, configurationAttribute.Key, configurationAttribute.ConfigurationSources, out value);
-
-                if (!got)
-                {
-                    if (defaultAttribute == null)
-                    {
-                        if (required)
-                        {
-                            throw new ConfigurationMissingException(configurationAttribute.Key, propertyInfo.PropertyType, configurationAttribute.ConfigurationSources);
-                        }
-                        continue;
-                    }
-
-                    value = defaultAttribute.Default.ToString();
-                }
+                Action<MemberInfo, T, object> setterAction = GetSetterAction<T>(member);
 
                 SetValue(
-                    propertyInfo,
-                    propertyInfo.PropertyType,
-                    (member, result, toSet) => { (member as PropertyInfo).SetValue(result, toSet); },
+                    member,
+                    member.GetUnderlyingType(),
+                    setterAction,
                     value,
                     configurationAttribute.Key,
                     shouldHideInLog,
@@ -89,6 +59,27 @@ namespace EasyConfig
             }
 
             return parameters;
+        }
+
+        private static Action<MemberInfo, T, object> GetSetterAction<T>(MemberInfo member)
+        {
+            Action<MemberInfo, T, object> setterAction;
+            if (member.MemberType == MemberTypes.Field)
+            {
+                setterAction = (memberInfo, result, toSet) => { (memberInfo as FieldInfo).SetValue(result, toSet); };
+            }
+
+            else if (member.MemberType == MemberTypes.Property)
+            {
+                setterAction = (memberInfo, result, toSet) => { (memberInfo as PropertyInfo).SetValue(result, toSet); };
+            }
+
+            else
+            {
+                throw new ArgumentException("Input MemberInfo must be of type FieldInfo or PropertyInfo");
+            }
+
+            return setterAction;
         }
 
         private static bool TryGet(Dictionary<string, string> argsDict, string key, ConfigurationSources sources, out string value)
