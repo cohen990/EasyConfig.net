@@ -1,5 +1,4 @@
 using System;
-using EasyConfig.Attributes;
 using EasyConfig.Exceptions;
 using NUnit.Framework;
 #pragma warning disable 649
@@ -9,18 +8,16 @@ namespace EasyConfig.UnitTests
     [TestFixture]
     public class ConfigTests
     {
-        private const string EnvironmentVariableTestKey = "EasyConfig_this_environment_variable_should_only_exist_during_these_tests";
-
         [SetUp]
         public void SetUp()
         {
-            Environment.SetEnvironmentVariable(EnvironmentVariableTestKey, Guid.NewGuid().ToString(), EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable(InEnvironmentVariables.EnvironmentVariableTestKey, Guid.NewGuid().ToString(), EnvironmentVariableTarget.Process);
         }
 
         [TearDown]
         public void TearDown()
         {
-            Environment.SetEnvironmentVariable(EnvironmentVariableTestKey, null, EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable(InEnvironmentVariables.EnvironmentVariableTestKey, null, EnvironmentVariableTarget.Process);
         }
 
         [Test]
@@ -141,68 +138,8 @@ namespace EasyConfig.UnitTests
         [Test]
         public void Populate_AsProperty_PublicGetterSetter_CanSet()
         {
-            var result = Config.Populate<AsProperty>("exists=thing").Test;
+            var result = Config.Populate<HasProperty>("exists=thing").Test;
             Assert.That(result, Is.EqualTo("thing"));
-        }
-
-        private class UriRequired
-        {
-            [EnvironmentOrCommandLine("endpoint"), Required]
-            public Uri Test;
-        }
-
-        private class IntRequired
-        {
-            [EnvironmentOrCommandLine("number"), Required]
-            public int Test;
-        }
-
-        private class InEnvironmentVariables
-        {
-            [Environment(EnvironmentVariableTestKey), Required]
-            public string Test;
-        }
-
-        private class NotInEnvironmentVariables
-        {
-            [Environment("shouldnt_be_in_environment_variables"), Required]
-            public string Test;
-        }
-
-        private class NotRequired
-        {
-            [Environment("shouldnt_be_in_environment_variables")]
-            public string Test;
-        }
-
-        private class HasDefault
-        {
-            [Environment("shouldnt_be_in_environment_variables"), Default("defaulttest")]
-            public string Test;
-        }
-
-        private class InAppConfig
-        {
-            [AppConfig("InAppConfig")]
-            public string Test;
-        }
-
-        private class NotInAppConfig
-        {
-            [AppConfig("ShouldNeverBeInAppConfig"), Required]
-            public string Test;
-        }
-
-        private class DefaultingAppConfig
-        {
-            [AppConfig("ShouldNeverBeInAppConfig"), Default("sample")]
-            public string Test;
-        }
-
-        private class AsProperty
-        {
-            [CommandLine("exists")]
-            public string Test { get; set; }
         }
     }
 }
