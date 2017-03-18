@@ -138,6 +138,13 @@ namespace EasyConfig.UnitTests
             Assert.That(result, Is.EqualTo("sample"));
         }
 
+        [Test]
+        public void Populate_AsProperty_PublicGetterSetter_CanSet()
+        {
+            var result = Config.Populate<AsProperty>("exists=thing").Test;
+            Assert.That(result, Is.EqualTo("thing"));
+        }
+
         private class UriRequired
         {
             [EnvironmentOrCommandLine("endpoint"), Required]
@@ -190,6 +197,12 @@ namespace EasyConfig.UnitTests
         {
             [AppConfig("ShouldNeverBeInAppConfig"), Default("sample")]
             public string Test;
+        }
+
+        private class AsProperty
+        {
+            [CommandLine("exists")]
+            public string Test { get; set; }
         }
     }
 }

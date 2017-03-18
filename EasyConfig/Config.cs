@@ -43,7 +43,49 @@ namespace EasyConfig
                     value = defaultAttribute.Default.ToString();
                 }
 
-                SetValue(fieldInfo, value, configurationAttribute.Key, shouldHideInLog, ref parameters);
+                SetValue(
+                    fieldInfo,
+                    fieldInfo.FieldType,
+                    (member, result, toSet) => { (member as FieldInfo).SetValue(result, toSet); },
+                    value,
+                    configurationAttribute.Key,
+                    shouldHideInLog,
+                    ref parameters);
+            }
+
+            foreach(var propertyInfo in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                var defaultAttribute = propertyInfo.GetCustomAttribute<DefaultAttribute>();
+                var required = propertyInfo.GetCustomAttribute<RequiredAttribute>() != null;
+                var configurationAttribute = propertyInfo.GetCustomAttribute<ConfigurationAttribute>();
+                var shouldHideInLog = propertyInfo.GetCustomAttribute<SensitiveInformationAttribute>() != null;
+
+                string value;
+
+                var got = TryGet(argsDict, configurationAttribute.Key, configurationAttribute.ConfigurationSources, out value);
+
+                if (!got)
+                {
+                    if (defaultAttribute == null)
+                    {
+                        if (required)
+                        {
+                            throw new ConfigurationMissingException(configurationAttribute.Key, propertyInfo.PropertyType, configurationAttribute.ConfigurationSources);
+                        }
+                        continue;
+                    }
+
+                    value = defaultAttribute.Default.ToString();
+                }
+
+                SetValue(
+                    propertyInfo,
+                    propertyInfo.PropertyType,
+                    (member, result, toSet) => { (member as PropertyInfo).SetValue(result, toSet); },
+                    value,
+                    configurationAttribute.Key,
+                    shouldHideInLog,
+                    ref parameters);
             }
 
             return parameters;
@@ -91,9 +133,9 @@ namespace EasyConfig
             return argsDict;
         }
 
-        private static void SetValue<T>(FieldInfo field, string value, string key, bool shouldHideInLog, ref T result) where T : new()
+        private static void SetValue<T>(MemberInfo member, Type memberType, Action<MemberInfo, T, object> SetValue, string value, string key, bool shouldHideInLog, ref T result) where T : new()
         {
-            if (field.FieldType == typeof(Uri))
+            if (memberType == typeof(Uri))
             {
                 Uri uri;
 
@@ -104,9 +146,9 @@ namespace EasyConfig
 
                 LogConfigurationValue(key, value, shouldHideInLog);
 
-                field.SetValue(result, new Uri(value));
+                SetValue(member, result, uri);
             }
-            else if (field.FieldType == typeof(int))
+            else if (memberType == typeof(int))
             {
                 int i;
                 if (!int.TryParse(value, out i))
@@ -116,16 +158,16 @@ namespace EasyConfig
 
                 LogConfigurationValue(key, value, shouldHideInLog);
 
-                field.SetValue(result, i);
+                SetValue(member, result, i);
             }
             else
             {
                 LogConfigurationValue(key, value, shouldHideInLog);
 
-                field.SetValue(result, value);
+                SetValue(member, result, value);
             }
         }
-
+        
         private static void LogConfigurationValue(string key, string value, bool shouldHideInLog)
         {
             if (shouldHideInLog)
