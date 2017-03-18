@@ -4,7 +4,7 @@ Easily manage configuration within your .net application
 
 [![Build Status](https://travis-ci.org/cohen990/EasyConfig.net.svg?branch=master)](https://travis-ci.org/cohen990/EasyConfig.net)
 
-[nuget](https://www.nuget.org/packages/EasyConfig.net/)
+[![NuGet Version and Downloads count](https://buildstats.info/nuget/EasyConfig.net)](https://www.nuget.org/packages/EasyConfig.net)
 
 ## Features
 
