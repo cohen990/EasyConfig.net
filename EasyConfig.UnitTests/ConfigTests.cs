@@ -141,5 +141,34 @@ namespace EasyConfig.UnitTests
             var result = Config.Populate<HasProperty>("exists=thing").Test;
             Assert.That(result, Is.EqualTo("thing"));
         }
+
+        [Test]
+        public void Populate_HasBool_DoesNotThrow()
+        {
+            Assert.DoesNotThrow(() => Config.Populate<HasBool>("exists=true"));
+        }
+
+        [Test]
+        public void Populate_HasBool_SetsBool()
+        {
+            var result = Config.Populate<HasBool>("exists=true").Test;
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Populate_HasDouble_SetsDouble()
+        {
+            double val = 1.0527498;
+            var result = Config.Populate<HasDouble>("exists=" + val).Test;
+
+            Assert.That(result, Is.EqualTo(val));
+        }
+        
+        [Test]
+        public void Populate_GivenUnsupportedType_Throws()
+        {
+            Assert.Throws<TypeNotSupportedException>(() => Config.Populate<HasUnsupportedType>("exists={Prop:'value'}"));
+        }
     }
 }

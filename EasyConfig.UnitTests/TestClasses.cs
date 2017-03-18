@@ -82,4 +82,27 @@ namespace EasyConfig.UnitTests
         public string Prop2 { get; set; }
         public string Prop3 { get; set; }
     }
+
+    internal class HasBool
+    {
+        [CommandLine("exists")]
+        public bool Test;
+    }
+
+    internal class HasDouble
+    {
+        [CommandLine("exists")]
+        public double Test;
+    }
+
+    internal class HasUnsupportedType
+    {
+        [CommandLine("exists")]
+        public UnsupportedType Test;
+    }
+    
+    internal class UnsupportedType
+    {
+        public string Prop;
+    }
 }

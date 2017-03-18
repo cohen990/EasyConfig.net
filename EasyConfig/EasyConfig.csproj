@@ -46,6 +46,7 @@
     <Compile Include="Attributes\ConfigurationAttribute.cs" />
     <Compile Include="ConfigurationSources.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Exceptions\TypeNotSupportedException.cs" />
     <Compile Include="Exceptions\ConfigurationMissingException.cs" />
     <Compile Include="Exceptions\ConfigurationTypeException.cs" />
     <Compile Include="Attributes\DefaultAttribute.cs" />
